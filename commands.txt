@@ -1,0 +1,4 @@
+# 멀티 스피커 학습 명령어
+
+nohup python train_ms.py -c configs/aihub_base.json -m aihub_base > /data/vits_for_korean/logfile.log 2>&1 &
+
