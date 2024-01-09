@@ -18,6 +18,16 @@ The data used for model training can be downloaded from the following link.
 - [감성 및 발화스타일 동시 고려 음성합성 데이터](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=71349)
 - [감성 및 발화 스타일별 음성합성 데이터](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=466)
 
+### Data Preprocessing
+
+데이터 세트를 다운로드 한 뒤 학습할 수 있게 전처리를 해야 합니다. 
+
+1. 파일 경로에 한글 또는 특수문자가 있는 경우 영어 또는 숫자로 변경해야 합니다.
+2. 학습에 사용할 .wav 파일을 22kHz sampling rate로 변환해야 합니다.
+3. 스테레오 파일이 있는 경우 모노 파일로 변환해야 합니다.
+4. google drive에서 다운로드한 filelists는 라벨과 wav파일을 연결시켜 놓은 결과물입니다. (.cleaned 파일은 g2pk를 사용하여 문장 단위로 변환한 결과물입니다.)
+4-1. 변환 전 filelist에서 다른 음소변환 모듈을 사용할 경우 몇 개의 영어 단어를 한국어 발음으로 변환하고 '\xa0'특수문자를 제거해야 합니다.
+
 ### Installing
 
 You can clone this GitHub repository and use it.
@@ -26,30 +36,16 @@ You can clone this GitHub repository and use it.
 git clone https://github.com/0913ktg/vits_korean_multispeaker
 ```
 
+You can download the model checkpoints and filelists from the [Google Drive link](https://drive.google.com/drive/folders/1nLE6EY1-gOfbqyDJzNgFkMoKXH7pvVgT?usp=sharing).
+
 ### Train
-1. Put your data into a folder, e.g. `data/your_data`. Audio files should be named with the suffix `.wav` and text files with `.normalized.txt`.
-
-2. Quantize the data:
-
-```
-python -m vall_e.emb.qnt data/your_data
-```
-
-3. Generate phonemes based on the text:
-
-```
-python -m vall_e.emb.g2p data/your_data
-```
-
-4. Customize your configuration by creating `config/your_data/ar.yml` and `config/your_data/nar.yml`. Refer to the example configs in `config/korean` and `vall_e/config.py` for details. You may choose different model presets, check `vall_e/vall_e/__init__.py`.
-
-5. Train the AR or NAR model using the following scripts:
-
-```
-python -m vall_e.train yaml=config/your_data/ar_or_nar.yml
-```
-
-You may quit your training any time by just typing `quit` in your CLI. The latest checkpoint will be automatically saved.
-
+22kHz 음성 파일과 train, validation filelists 그리고 데이터 전처리가 완료 되었다면 train_ms.py를 실행하여 학습을 할 수 있습니다. 
+멀티 GPU 사용이 가능한 것을 확인하였습니다. 
 
 ### Synthesis
+
+1. In inference.py, modify the path for the Generator checkpoint accordingly.
+2. Enter the desired Korean sentences in texts. (Separate multiple sentences with a comma.)
+3. Enter the speaker number in sid. (from 0 to 184)
+4. Running inference.py will create a file named test{i}.wav.
+
