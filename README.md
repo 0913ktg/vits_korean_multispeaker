@@ -27,6 +27,7 @@ The data used for model training can be downloaded from the following link.
 3. 스테레오 파일이 있는 경우 모노 파일로 변환해야 합니다.
 4. google drive에서 다운로드한 filelists는 라벨과 wav파일을 연결시켜 놓은 결과물입니다. (.cleaned 파일은 g2pk를 사용하여 문장 단위로 변환한 결과물입니다.)
 4-1. 변환 전 filelist에서 다른 음소변환 모듈을 사용할 경우 몇 개의 영어 단어를 한국어 발음으로 변환하고 '\xa0'특수문자를 제거해야 합니다.
+5. make_mels.py 파일을 데이터 세트 상위 경로에 위치시키고 melspectrogram을 생성합니다. (학습에 필요한 파일을 미리 생성해 파일화.)
 
 ### Installing
 
