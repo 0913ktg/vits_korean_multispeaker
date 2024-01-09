@@ -14,9 +14,9 @@ The Docker image, which can be used to create the Docker container, can be downl
 
 The data used for model training can be downloaded from the following link.
 
-문학작품 낭송․낭독 음성 데이터(시, 소설, 희곡, 시나리오) : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=485
-감성 및 발화스타일 동시 고려 음성합성 데이터 : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=71349
-감성 및 발화 스타일별 음성합성 데이터 : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=466
+- 문학작품 낭송․낭독 음성 데이터(시, 소설, 희곡, 시나리오) : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=485
+- 감성 및 발화스타일 동시 고려 음성합성 데이터 : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=71349
+- 감성 및 발화 스타일별 음성합성 데이터 : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=466
 
 ### Installing
 
