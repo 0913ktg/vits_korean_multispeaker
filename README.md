@@ -1,6 +1,7 @@
 # Korean multi-speaker VITS
 
 This project was implemented using the official PyTorch [implementation](https://github.com/jaywalnut310/vits) by "jaywalnut310".
+After training for 10 epochs (32 batch size, 460k steps), the inference results for two random male and female speakers are available in the inference_samples.
 
 ## Getting Started
 
@@ -22,12 +23,12 @@ The data used for model training can be downloaded from the following link.
 
 데이터 세트를 다운로드 한 뒤 학습할 수 있게 전처리를 해야 합니다. 
 
-1. 파일 경로에 한글 또는 특수문자가 있는 경우 영어 또는 숫자로 변경해야 합니다.
-2. 학습에 사용할 .wav 파일을 22kHz sampling rate로 변환해야 합니다.
-3. 스테레오 파일이 있는 경우 모노 파일로 변환해야 합니다.
-4. google drive에서 다운로드한 filelists는 라벨과 wav파일을 연결시켜 놓은 결과물입니다. (.cleaned 파일은 g2pk를 사용하여 문장 단위로 변환한 결과물입니다.)
-4-1. 변환 전 filelist에서 다른 음소변환 모듈을 사용할 경우 몇 개의 영어 단어를 한국어 발음으로 변환하고 '\xa0'특수문자를 제거해야 합니다.
-5. make_mels.py 파일을 데이터 세트 상위 경로에 위치시키고 melspectrogram을 생성합니다. (학습에 필요한 파일을 미리 생성해 파일화.)
+1. If file paths contain Korean or special characters, change them to English or numbers.
+2. Convert .wav files for training to a 22kHz sampling rate.
+3. If there are stereo files, convert them to mono.
+4. The filelists downloaded from Google Drive link the labels and wav files. (.cleaned files are the result of converting sentences using g2pk.)
+4-1. If using a different phoneme conversion module, convert a few English words to Korean pronunciation and remove the '\xa0' special character.
+5. Place the make_mels.py file at the top path of the dataset and generate melspectrograms. (Pre-create files required for training.)
 
 ### Installing
 
@@ -40,8 +41,7 @@ git clone https://github.com/0913ktg/vits_korean_multispeaker
 You can download the model checkpoints and filelists from the [Google Drive link](https://drive.google.com/drive/folders/1nLE6EY1-gOfbqyDJzNgFkMoKXH7pvVgT?usp=sharing).
 
 ### Train
-22kHz 음성 파일과 train, validation filelists 그리고 데이터 전처리가 완료 되었다면 train_ms.py를 실행하여 학습을 할 수 있습니다. 
-멀티 GPU 사용이 가능한 것을 확인하였습니다. 
+Once you have 22kHz audio files, train, and validation filelists, and have completed data preprocessing, you can start training by running train_ms.py. Multi-GPU usage has been confirmed.
 
 ### Synthesis
 
