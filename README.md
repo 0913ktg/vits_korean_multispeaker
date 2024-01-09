@@ -1,58 +1,55 @@
-# VITS: Conditional Variational Autoencoder with Adversarial Learning for End-to-End Text-to-Speech
+# Korean multi-speaker VITS
 
-### Jaehyeon Kim, Jungil Kong, and Juhee Son
+This project was implemented using the official PyTorch [implementation](https://github.com/jaywalnut310/vits) by "jaywalnut310".
 
-In our recent [paper](https://arxiv.org/abs/2106.06103), we propose VITS: Conditional Variational Autoencoder with Adversarial Learning for End-to-End Text-to-Speech.
+## Getting Started
 
-Several recent end-to-end text-to-speech (TTS) models enabling single-stage training and parallel sampling have been proposed, but their sample quality does not match that of two-stage TTS systems. In this work, we present a parallel end-to-end TTS method that generates more natural sounding audio than current two-stage models. Our method adopts variational inference augmented with normalizing flows and an adversarial training process, which improves the expressive power of generative modeling. We also propose a stochastic duration predictor to synthesize speech with diverse rhythms from input text. With the uncertainty modeling over latent variables and the stochastic duration predictor, our method expresses the natural one-to-many relationship in which a text input can be spoken in multiple ways with different pitches and rhythms. A subjective human evaluation (mean opinion score, or MOS) on the LJ Speech, a single speaker dataset, shows that our method outperforms the best publicly available TTS systems and achieves a MOS comparable to ground truth.
+Setting up the development environment for this project can be challenging due to version conflicts with various libraries. 
 
-Visit our [demo](https://jaywalnut310.github.io/vits-demo/index.html) for audio samples.
+Therefore, we managed the development environment of this project using a Docker container. 
 
-We also provide the [pretrained models](https://drive.google.com/drive/folders/1ksarh-cJf3F5eKJjLVWY0X1j1qsQqiS2?usp=sharing).
+The Docker image, which can be used to create the Docker container, can be downloaded from [Docker Hub](https://hub.docker.com/layers/0913ktg/tts_image/vits_korean_final/images/sha256-6f50059898a0c0cfa88123210a7ef7b24a2be4fccdb00474d2f02da4194162e2?context=repo).
 
-** Update note: Thanks to [Rishikesh (ऋषिकेश)](https://github.com/jaywalnut310/vits/issues/1), our interactive TTS demo is now available on [Colab Notebook](https://colab.research.google.com/drive/1CO61pZizDj7en71NQG_aqqKdGaA_SaBf?usp=sharing).
+### Dataset
 
-<table style="width:100%">
-  <tr>
-    <th>VITS at training</th>
-    <th>VITS at inference</th>
-  </tr>
-  <tr>
-    <td><img src="resources/fig_1a.png" alt="VITS at training" height="400"></td>
-    <td><img src="resources/fig_1b.png" alt="VITS at inference" height="400"></td>
-  </tr>
-</table>
+The data used for model training can be downloaded from the following link.
 
+문학작품 낭송․낭독 음성 데이터(시, 소설, 희곡, 시나리오) : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=485
+감성 및 발화스타일 동시 고려 음성합성 데이터 : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=71349
+감성 및 발화 스타일별 음성합성 데이터 : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=466
 
-## Pre-requisites
-0. Python >= 3.6
-0. Clone this repository
-0. Install python requirements. Please refer [requirements.txt](requirements.txt)
-    1. You may need to install espeak first: `apt-get install espeak`
-0. Download datasets
-    1. Download and extract the LJ Speech dataset, then rename or create a link to the dataset folder: `ln -s /path/to/LJSpeech-1.1/wavs DUMMY1`
-    1. For mult-speaker setting, download and extract the VCTK dataset, and downsample wav files to 22050 Hz. Then rename or create a link to the dataset folder: `ln -s /path/to/VCTK-Corpus/downsampled_wavs DUMMY2`
-0. Build Monotonic Alignment Search and run preprocessing if you use your own datasets.
-```sh
-# Cython-version Monotonoic Alignment Search
-cd monotonic_align
-python setup.py build_ext --inplace
+### Installing
 
-# Preprocessing (g2p) for your own datasets. Preprocessed phonemes for LJ Speech and VCTK have been already provided.
-# python preprocess.py --text_index 1 --filelists filelists/ljs_audio_text_train_filelist.txt filelists/ljs_audio_text_val_filelist.txt filelists/ljs_audio_text_test_filelist.txt 
-# python preprocess.py --text_index 2 --filelists filelists/vctk_audio_sid_text_train_filelist.txt filelists/vctk_audio_sid_text_val_filelist.txt filelists/vctk_audio_sid_text_test_filelist.txt
+You can clone this GitHub repository and use it.
+
+```
+git clone https://github.com/0913ktg/vits_korean_multispeaker
 ```
 
+### Train
+1. Put your data into a folder, e.g. `data/your_data`. Audio files should be named with the suffix `.wav` and text files with `.normalized.txt`.
 
-## Training Exmaple
-```sh
-# LJ Speech
-python train.py -c configs/ljs_base.json -m ljs_base
+2. Quantize the data:
 
-# VCTK
-python train_ms.py -c configs/vctk_base.json -m vctk_base
+```
+python -m vall_e.emb.qnt data/your_data
 ```
 
+3. Generate phonemes based on the text:
 
-## Inference Example
-See [inference.ipynb](inference.ipynb)
+```
+python -m vall_e.emb.g2p data/your_data
+```
+
+4. Customize your configuration by creating `config/your_data/ar.yml` and `config/your_data/nar.yml`. Refer to the example configs in `config/korean` and `vall_e/config.py` for details. You may choose different model presets, check `vall_e/vall_e/__init__.py`.
+
+5. Train the AR or NAR model using the following scripts:
+
+```
+python -m vall_e.train yaml=config/your_data/ar_or_nar.yml
+```
+
+You may quit your training any time by just typing `quit` in your CLI. The latest checkpoint will be automatically saved.
+
+
+### Synthesis
